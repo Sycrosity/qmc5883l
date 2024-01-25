@@ -7,30 +7,31 @@
 #![deny(missing_docs)]
 #![no_std]
 
-extern crate embedded_hal as hal;
+use embedded_hal as hal;
 
-use hal::blocking::i2c::{Write, WriteRead};
+use hal::i2c::I2c;
 
 const I2C_ADDRESS: u8 = 0x0d;
 
 #[allow(dead_code)]
 #[allow(non_camel_case_types)]
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Copy, Clone)]
 #[repr(u8)]
 enum Register {
-    DATA_OUT_X_L = 0,
-    DATA_OUT_X_H = 1,
-    DATA_OUT_Y_L = 2,
-    DATA_OUT_Y_H = 3,
-    DATA_OUT_Z_L = 4,
-    DATA_OUT_Z_H = 5,
-    STATUS = 6,
-    TOUT_L = 7,
-    TOUT_H = 8,
-    CONTROL1 = 9,
-    CONTROL2 = 10,
-    PERIOD = 11,
-    CHIP_ID = 13,
+    DATA_OUT_X_L,
+    DATA_OUT_X_H,
+    DATA_OUT_Y_L,
+    DATA_OUT_Y_H,
+    DATA_OUT_Z_L,
+    DATA_OUT_Z_H,
+    STATUS,
+    TOUT_L,
+    TOUT_H,
+    CONTROL1,
+    CONTROL2,
+    PERIOD,
+    CHIP_ID,
 }
 
 const STATUS_OVL: u8 = 0b010;
@@ -104,17 +105,17 @@ pub struct QMC5883L<I2C> {
 
 impl<I2C, E> QMC5883L<I2C>
 where
-    I2C: WriteRead<Error = E> + Write<Error = E>,
+    I2C: I2c<Error = E>,
 {
     /// Creates a new QMC5883L device from an I2C peripheral; begins with a soft reset.
     pub fn new(i2c: I2C) -> Result<Self, Error<E>> {
-        let mut dev = QMC5883L { i2c: i2c };
-        let id = dev.read_u8(Register::CHIP_ID)?;
+        let mut qmc = Self { i2c };
+        let id = qmc.read_u8(Register::CHIP_ID)?;
         if id != 0xff {
             return Err(Error::InvalidDevice(id));
         }
-        dev.reset()?;
-        Ok(dev)
+        qmc.reset()?;
+        Ok(qmc)
     }
 
     /// Soft reset the device.
