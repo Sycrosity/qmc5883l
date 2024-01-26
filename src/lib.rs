@@ -100,6 +100,7 @@ impl<E> core::convert::From<E> for Error<E> {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
 /// QMC5883L driver
 pub struct QMC5883L<I2C> {
     i2c: I2C,
