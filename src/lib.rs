@@ -7,9 +7,11 @@
 #![deny(missing_docs)]
 #![no_std]
 
+use core::fmt::Debug;
+
 use embedded_hal as hal;
 
-use hal::i2c::I2c;
+use hal::i2c::{ErrorType, I2c};
 
 const I2C_ADDRESS: u8 = 0x0d;
 
@@ -105,7 +107,8 @@ pub struct QMC5883L<I2C> {
 
 impl<I2C, E> QMC5883L<I2C>
 where
-    I2C: I2c<Error = E>,
+    I2C: I2c<Error = E> + ErrorType,
+    E: Debug,
 {
     /// Creates a new QMC5883L device from an I2C peripheral; begins with a soft reset.
     pub fn new(i2c: I2C) -> Result<Self, Error<E>> {
