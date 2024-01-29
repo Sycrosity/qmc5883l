@@ -21,19 +21,19 @@ const I2C_ADDRESS: u8 = 0x0d;
 #[derive(Copy, Clone)]
 #[repr(u8)]
 enum Register {
-    DATA_OUT_X_L,
-    DATA_OUT_X_H,
-    DATA_OUT_Y_L,
-    DATA_OUT_Y_H,
-    DATA_OUT_Z_L,
-    DATA_OUT_Z_H,
-    STATUS,
-    TOUT_L,
-    TOUT_H,
-    CONTROL1,
-    CONTROL2,
-    PERIOD,
-    CHIP_ID,
+    DATA_OUT_X_L = 0,
+    DATA_OUT_X_H = 1,
+    DATA_OUT_Y_L = 2,
+    DATA_OUT_Y_H = 3,
+    DATA_OUT_Z_L = 4,
+    DATA_OUT_Z_H = 5,
+    STATUS = 6,
+    TOUT_L = 7,
+    TOUT_H = 8,
+    CONTROL1 = 9,
+    CONTROL2 = 10,
+    PERIOD = 11,
+    CHIP_ID = 13,
 }
 
 const STATUS_OVL: u8 = 0b010;
